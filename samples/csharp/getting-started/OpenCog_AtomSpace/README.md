@@ -70,7 +70,7 @@ var owns = atomSpace.AddNode(NodeTypes.Predicate, "owns");
 var john = atomSpace.AddNode(NodeTypes.Concept, "John");
 var car = atomSpace.AddNode(NodeTypes.Concept, "Car");
 var argList = new Link(LinkTypes.List, john, car);
-atomSpace.AddLink(LinkTypes.Evaluation, owns, argList);
+atomSpace.AddLink(LinkTypes.Evaluation, new TruthValue(1.0, 0.99), owns, argList);
 ```
 
 ### 4. Pattern Matching

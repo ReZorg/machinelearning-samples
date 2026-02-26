@@ -230,30 +230,36 @@ namespace OpenCog_AtomSpace
             var techCorp = socialSpace.AddNode(NodeTypes.Concept, "TechCorp");
             var dataInc = socialSpace.AddNode(NodeTypes.Concept, "DataInc");
 
-            // Create relationships
+            // Create relationships with properly named ListLinks for readability
             // Alice knows Bob
+            var aliceBobList = new Link(LinkTypes.List, alice, bob);
             socialSpace.AddLink(LinkTypes.Evaluation, new TruthValue(1.0, 0.99), 
-                knows, new Link(LinkTypes.List, alice, bob));
+                knows, aliceBobList);
 
             // Bob knows Charlie
+            var bobCharlieList = new Link(LinkTypes.List, bob, charlie);
             socialSpace.AddLink(LinkTypes.Evaluation, new TruthValue(1.0, 0.99),
-                knows, new Link(LinkTypes.List, bob, charlie));
+                knows, bobCharlieList);
 
             // Alice likes Charlie
+            var aliceCharlieList = new Link(LinkTypes.List, alice, charlie);
             socialSpace.AddLink(LinkTypes.Evaluation, new TruthValue(0.8, 0.9),
-                likes, new Link(LinkTypes.List, alice, charlie));
+                likes, aliceCharlieList);
 
             // Alice works at TechCorp
+            var aliceTechCorpList = new Link(LinkTypes.List, alice, techCorp);
             socialSpace.AddLink(LinkTypes.Evaluation, new TruthValue(1.0, 1.0),
-                worksAt, new Link(LinkTypes.List, alice, techCorp));
+                worksAt, aliceTechCorpList);
 
             // Bob works at TechCorp
+            var bobTechCorpList = new Link(LinkTypes.List, bob, techCorp);
             socialSpace.AddLink(LinkTypes.Evaluation, new TruthValue(1.0, 1.0),
-                worksAt, new Link(LinkTypes.List, bob, techCorp));
+                worksAt, bobTechCorpList);
 
             // Charlie works at DataInc
+            var charlieDataIncList = new Link(LinkTypes.List, charlie, dataInc);
             socialSpace.AddLink(LinkTypes.Evaluation, new TruthValue(1.0, 1.0),
-                worksAt, new Link(LinkTypes.List, charlie, dataInc));
+                worksAt, charlieDataIncList);
 
             Console.WriteLine($"Created social network with {socialSpace.Count} atoms.");
             Console.WriteLine();
@@ -266,20 +272,20 @@ namespace OpenCog_AtomSpace
             var varY = new Node(NodeTypes.Variable, "Y");
             var varZ = new Node(NodeTypes.Variable, "Z");
 
-            // Pattern for "X knows Y"
-            var xKnowsY = new Link(LinkTypes.Evaluation, 
-                knows, new Link(LinkTypes.List, varX, varY));
+            // Pattern for "X knows Y" - extracting list links for clarity
+            var xyList = new Link(LinkTypes.List, varX, varY);
+            var xKnowsY = new Link(LinkTypes.Evaluation, knows, xyList);
 
             // Pattern for "Y knows Z"  
-            var yKnowsZ = new Link(LinkTypes.Evaluation,
-                knows, new Link(LinkTypes.List, varY, varZ));
+            var yzList = new Link(LinkTypes.List, varY, varZ);
+            var yKnowsZ = new Link(LinkTypes.Evaluation, knows, yzList);
 
             // Combined pattern: X knows Y AND Y knows Z
             var premise = new Link(LinkTypes.And, xKnowsY, yKnowsZ);
 
             // Conclusion: X might know Z
-            var xMightKnowZ = new Link(LinkTypes.Evaluation,
-                knows, new Link(LinkTypes.List, varX, varZ));
+            var xzList = new Link(LinkTypes.List, varX, varZ);
+            var xMightKnowZ = new Link(LinkTypes.Evaluation, knows, xzList);
 
             // Create the implication
             socialSpace.AddLink(LinkTypes.Implication, new TruthValue(0.7, 0.6), premise, xMightKnowZ);
